@@ -1,10 +1,5 @@
 locals {
-  name = "private_ecr_repo"
-}
-
-variable "ecr_name" {
-  type = string
-  description = "ECR Name"
+  ecr_name = "private_ecr"
 }
 
 variable "ecr_no" {
