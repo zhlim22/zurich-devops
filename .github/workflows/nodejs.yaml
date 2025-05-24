@@ -1,9 +1,9 @@
-name: Product API Build
+name: User Service Build
 
 on: workflow_dispatch
 
 env:
-  working-directory: ./product
+  working-directory: ./users-service
 
 jobs:
   Build:
@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
+          node-version-file: '${{env.working-directory}}/package.json'
+          cache-dependency-path: '${{env.working-directory}}/package-lock.json'
 
       - name: Build Project
         working-directory: ${{env.working-directory}}
@@ -29,7 +31,7 @@ jobs:
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
-      image-name: productapi
+      image-name: usersservice
       version: 0.0.1
-      working-directory: ./product
+      working-directory: ./users-service
     needs: Build
