@@ -34,3 +34,4 @@ jobs:
       version: 0.0.1
       working-directory: ./users-api
     needs: Build
+    secrets: inherit
