@@ -1,6 +1,17 @@
 name: User API Build
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      language-version:
+        required: true
+        type: string
+      image-name:
+        required: true
+        type: string
+      image-version:
+        required: true
+        type: string
 
 env:
   working-directory: ./users-api
@@ -9,14 +20,14 @@ jobs:
   Build:
     uses: ./.github/workflows/maven.yaml
     with:
-      version: '8'
+      version: ${{inputs.language-version}}
       working-directory: ./users-api
 
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
-      image-name: ms-java
-      version: 0.0.1
+      image-name: ${{inputs.image-name}}
+      version: ${{inputs.image-version}}
       working-directory: ./users-api
     needs: Build
     secrets: inherit
