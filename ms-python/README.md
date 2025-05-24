@@ -1,93 +1,42 @@
-# python-microservices
-simple microservices
+## Python Flask Microservices
+The idea behind this application is to demonstrate the microservices architecture of today's modern system. In this demo, I have tried to show the basic microservices REST-API concepts of a tech & entertainment industry (i.e [Netflix](https://netflix.com)), and if we look at the system design of Netflix, it runs around more than 10,000+ microservices to manage the entire system, so in system-design, it's quite important to understand this concept.
 
-Your task is to build a simple microservice using the Python Flask framework.  This microservice should be responsible for uploading and downloading typical types of files (txt, pdf, png, jpg, etc.).
+<img src="screenshots/Netflix_Microservices.png"/>
 
-## Requirements
+## Technical Overview
+The Proof of Concept written using python and it uses a flask web framework to define the routes and to store the data in the server it uses mongodb database, and for authentication, it uses [JWT Token](https://jwt.io/) framework.
 
-1. /upload
-    - Uploads one file at a time.  Feel free to define what the payload looks like.  You can go ahead and persist the files to the filesystem somewhere.
+In this project, you will find three different types of microservices.
 
-2. /download
-    - Retrieves and downloads a single file, using the filename as the key.
+1. Users
+2. Movies
+3. Trending Now
 
-3. We will be looking at understanding of web services fundamentals, including usage of appropriate error response.
-    — You should force a failure condition to demonstrate.
-    
-4. We will also be looking more broadly at Python code structure, layout, and other best practices.
+### Swagger API Documentation
+The Swagger API docs can be accessible via [http://127.0.0.1:5000/api/docs](http://127.0.0.1:5000/api/docs) and to test the API endpoints you need to authorize yourself using your jwt access token.
 
-5. Feel free to incorporate whatever else you feel appropriate and feasible.
+<img src="screenshots/swagger.png"/>
 
-6. Finally, please provide a way to install dependencies and run/test the app.
+### Installation
+``````````````````````````````````````````````````````````````````````````````````
+git clone https://github.com/anshumanpattnaik/python-flask-microservices
+cd python-flask-microservices
+pip install -r requirements.txt
+source venv/bin/activate
+python3 run.py
 
-## Design
+Open http://127.0.0.1:5000 to view in the browser.
+```````````````````````````````````````````````````````````````````````````````````
 
-1. `http://localhost:8000/` will redict to `http://localhost:8000/upload`
-    - This page will list all uploaded files. And you can upload a file using UI.
-    - Or you can use curl to upload a file.
-    ```
-    curl -i -X POST -H "Content-Type: multipart/form-data" -F "file=@/path/to/file/sample.pdf" http://localhost:8000/upload
-    ```
-    
-2. When file upload fails, the error will show and a link to `upload` will be provided
-    - The upload file should have an extension.
-    - Only these extension will be allowed. `txt`, `rtf`, `doc`, `docx`, `xls`, `xlsx`, `pdf`
-    - The upload file name should be unique in the download folder of server.
-    - If upload file has any of the above issue, the server will show the corresponding error.
+### Build and run docker image
 
-3. Upload file using API endpoint `http://localhost:8000/upload/your-upload-file-name.ext`
-    - You can use curl or your program to upload file
-    ```
-    curl -i -X POST -H "Content-Type: application/json" --data-binary "@/Users/austinjung/Documents/sample.pdf" http://localhost:8000/upload/my_upload.pdf
-    ```
-    
-4. You can get all file names using API `http://localhost:8000/download`
-    - You can use curl or your program to get file names
-    ```
-    curl -i -X GET -H "Content-Type: application/json" http://localhost:8000/download
-    ```
-    - And the response will be
-    ```json
-    [
-        {
-            "filename": "Austin-Jung_2019_resume.pdf",
-            "url": "http://localhost:8000/download/Austin-Jung_2019_resume.pdf"
-        },
-        {
-            "filename": "sample.pdf",
-            "url": "http://localhost:8000/download/sample.pdf"
-        }
-    ]
-    ```
-    
-5. You can download a file using API `http://localhost:8000/download/sample.pdf`
-    - You can use curl or your program to get file names
-    ```
-    curl -i -X GET -H "Content-Type: application/json" http://localhost:8000/download/sample.pdf --output sample.pdf
-    ```
+```````````````````````````````````````````````````````
+docker build -t python-flask-microservices .
+```````````````````````````````````````````````````````
 
-## Deployment
+```````````````````````````````````````````````````````````````````````````````
+docker run -it --name python-container -p 5000:5000 python-flask-microservices
+```````````````````````````````````````````````````````````````````````````````
 
-1. This project repository is [https://github.com/austinjung/python-microservices](https://github.com/austinjung/python-microservices)
-
-2. The project repository is linked with [Austin's Docker Cloud](https://cloud.docker.com/repository/docker/austinjung/python-microservices/general)
-
-3. Clone this repository
-    ```
-    git clone git@github.com:austinjung/python-microservices.git
-    ```
-
-3. In your docker, run the following line.
-    ```
-    cd python-microservices
-    $ docker-compose down && docker-compose up --build -d
-    ```
-
-## Tests
-
-1. At the project folder, run pytest
-    ```
-    cd python-microservices
-    $ pytest
-    ```
-
+### License
+This project is licensed under the [MIT License](LICENSE)
