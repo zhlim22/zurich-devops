@@ -24,7 +24,7 @@ jobs:
         run: ./mvnw clean install
 
   Docker:
-    uses: ./.github/docker-image-build.yaml
+    uses: ./.github/workflows/docker-image-build.yaml
     with:
       image-name: userapi
       version: 0.0.1
