@@ -19,9 +19,13 @@ jobs:
           distribution: 'corretto'
           cache: 'maven'
 
-      - name: Maven Install
+      - name: Build Project
         working-directory: ${{env.working-directory}}
-        run: ./mvnw clean install
+        run: ./mvnw clean install -DskipTests
+
+      - name: Run Unit Tests
+        working-directory: ${{env.working-directory}}
+        run: ./mvnw test
 
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
