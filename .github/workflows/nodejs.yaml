@@ -18,8 +18,8 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
-          node-version-file: ${{env.working-directory}}/package.json
-          cache-dependency-path: ${{env.working-directory}}/package.lock.json
+          node-version-file: '${{env.working-directory}}/package.json'
+          cache-dependency-path: '${{env.working-directory}}/package.lock.json'
 
       - name: Build Project
         working-directory: ${{env.working-directory}}
