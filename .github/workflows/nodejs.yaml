@@ -1,9 +1,14 @@
-name: User Service Build
+name: NodeJs Build
 
-on: workflow_dispatch
-
-env:
-  working-directory: ./users-service
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      working-directory:
+        required: true
+        type: string
 
 jobs:
   Build:
@@ -15,23 +20,15 @@ jobs:
       - name: Setup NodeJs
         uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: ${{inputs.version}}
           cache: 'npm'
-          node-version-file: '${{env.working-directory}}/package.json'
-          cache-dependency-path: '${{env.working-directory}}/package-lock.json'
+          node-version-file: '${{inputs.working-directory}}/package.json'
+          cache-dependency-path: '${{inputs.working-directory}}/package-lock.json'
 
       - name: Build Project
-        working-directory: ${{env.working-directory}}
-        run: npm install
+        working-directory: ${{inputs.working-directory}}
+        run: npm ci
 
       - name: Run Unit Tests
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{inputs.working-directory}}
         run: npm test
-
-  Docker:
-    uses: ./.github/workflows/docker-image-build.yaml
-    with:
-      image-name: usersservice
-      version: 0.0.1
-      working-directory: ./users-service
-    needs: Build
