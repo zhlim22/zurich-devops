@@ -1,93 +1,87 @@
-# python-microservices
-simple microservices
+# Minimal REST API Microservice
 
-Your task is to build a simple microservice using the Python Flask framework.  This microservice should be responsible for uploading and downloading typical types of files (txt, pdf, png, jpg, etc.).
+This repository contains a simple minimal REST microservice boilerplate written in python using Flask. 
+It is meant to be a boilerplate/template to clone and quickly start a scalable microservice application.
 
-## Requirements
+The service implements an API that maps RESTful calls to a mongoDB database. It implements read, create, delete, update of accounts records 
+in mongoDB, but you can pass in input any JSON file you want to insert
+into the database (only the field `id` is mandatory). The REST API is created using [Flask](https://github.com/pallets/flask), 
+[Flask-Injector](https://pypi.python.org/pypi/Flask-Injector) and [Connexion](https://github.com/zalando/connexion).
+Connexion is a python library to use [OpenAPI](https://swagger.io/specification/), formerly Swagger, to describe and document RESTful APIs
+using a design-first approach.
 
-1. /upload
-    - Uploads one file at a time.  Feel free to define what the payload looks like.  You can go ahead and persist the files to the filesystem somewhere.
 
-2. /download
-    - Retrieves and downloads a single file, using the filename as the key.
+![](img/swagger1.png)
 
-3. We will be looking at understanding of web services fundamentals, including usage of appropriate error response.
-    — You should force a failure condition to demonstrate.
-    
-4. We will also be looking more broadly at Python code structure, layout, and other best practices.
+Project Organization
+------------
 
-5. Feel free to incorporate whatever else you feel appropriate and feasible.
+    |
+    ├── /account-microservice
+    │   ├── /api       
+    |   |   ├── __init__.py                         <- Python init file
+    |   |   └── accounts.py                         <- Python file where methods are injected in the API
+    │   ├── /providers       
+    |   |   └── MongoProvider.py                    <- Python file where methods are implemented
+    │   ├── /swagger       
+    |   |   └── accounts-service-docs.yaml          <- API Swagger file
+    │   ├── app.py                                  <- Main python file to run the app
+    │   ├── Dockerfile                              <- Dockerfile used to build the image of the microservice
+    │   └── requirements.txt                        <- Requirements file with the list of the libraries needed
+    │
+    ├── /img                                        <- Folder containing the images for this README file
+    ├── LICENSE                                     <- License file
+    ├── README.md                                   <- This Readme file
+    └── docker-compose.yml                          <- Docker compose file, used to run the microservice
+     
+--------
 
-6. Finally, please provide a way to install dependencies and run/test the app.
+# Quickstart
+## Run the microservice
+Run the following command in the root folder of the project (need docker and docker-composed installed).
+```
+docker-compose up
+```
 
-## Design
+## Consult the API documentation
+To consult the API documentation just type the following address in a browser.
+```
+http://localhost:2020/v1.0/ui/
+```
 
-1. `http://localhost:8000/` will redict to `http://localhost:8000/upload`
-    - This page will list all uploaded files. And you can upload a file using UI.
-    - Or you can use curl to upload a file.
-    ```
-    curl -i -X POST -H "Content-Type: multipart/form-data" -F "file=@/path/to/file/sample.pdf" http://localhost:8000/upload
-    ```
-    
-2. When file upload fails, the error will show and a link to `upload` will be provided
-    - The upload file should have an extension.
-    - Only these extension will be allowed. `txt`, `rtf`, `doc`, `docx`, `xls`, `xlsx`, `pdf`
-    - The upload file name should be unique in the download folder of server.
-    - If upload file has any of the above issue, the server will show the corresponding error.
+**Endpoints available at `http://localhost:2020/v1.0/{URI}`**:
 
-3. Upload file using API endpoint `http://localhost:8000/upload/your-upload-file-name.ext`
-    - You can use curl or your program to upload file
-    ```
-    curl -i -X POST -H "Content-Type: application/json" --data-binary "@/Users/austinjung/Documents/sample.pdf" http://localhost:8000/upload/my_upload.pdf
-    ```
-    
-4. You can get all file names using API `http://localhost:8000/download`
-    - You can use curl or your program to get file names
-    ```
-    curl -i -X GET -H "Content-Type: application/json" http://localhost:8000/download
-    ```
-    - And the response will be
-    ```json
-    [
-        {
-            "filename": "Austin-Jung_2019_resume.pdf",
-            "url": "http://localhost:8000/download/Austin-Jung_2019_resume.pdf"
-        },
-        {
-            "filename": "sample.pdf",
-            "url": "http://localhost:8000/download/sample.pdf"
-        }
-    ]
-    ```
-    
-5. You can download a file using API `http://localhost:8000/download/sample.pdf`
-    - You can use curl or your program to get file names
-    ```
-    curl -i -X GET -H "Content-Type: application/json" http://localhost:8000/download/sample.pdf --output sample.pdf
-    ```
+|Method|URI|Description|
+|------|---|-----------|
+| GET | /accounts/{user_id} | Retrieve data from the DB given an id |
+| POST | /accounts/createUser | Insert data into the DB (Any JSON file, id mandatory)|
+| PUT | /accounts/updateUser | Update data in the DB |
+| DELETE | /accounts/{user_id} | Delete data from the DB | 
 
-## Deployment
+# Customize the microservice
 
-1. This project repository is [https://github.com/austinjung/python-microservices](https://github.com/austinjung/python-microservices)
+To customize the microservice for your own purpose, you have just to modify:
+- `MongoProvider.py` This file contains the implementation of the API methods. In this case it contains the methods to
+create, delete, update and read a record from mongoDB. Customize it with your desired implementation.
+- `accounts.py`: This file describes the API methods and what implementation should they run.
+- `accounts-service-docs.yaml`: This file contains the OpenAPI specification that describe the RESTful API.
+Modify this file according to your needs changing paths of the API methods and keeping in mind to modify `parameters`
+and `operationId` depending on what you edited in the `accounts.py` file. Consult the official documentation to learn more 
+about [OpenAPI](https://swagger.io/specification/v2/).
 
-2. The project repository is linked with [Austin's Docker Cloud](https://cloud.docker.com/repository/docker/austinjung/python-microservices/general)
+Run your modified microservice with the command:
+```
+docker-compose build && docker-compose up
+```
 
-3. Clone this repository
-    ```
-    git clone git@github.com:austinjung/python-microservices.git
-    ```
+# Create new microservices from the boilerplate
+To create a new microservice:
+- Duplicate the `account-microservice` folder and rename the it `XXXX-microservice`
+with the name of your new microservice. Customize your new microservice following the instruction in the previous section.
+- Modify the `docker-compose.yml` file duplicating the `account-microservice` specifications and renaming them `XXXX-microservice`.
+Keep in mind to modify also the parameters `- PORT=YYYY` and `ports` with your desired exposed port.
 
-3. In your docker, run the following line.
-    ```
-    cd python-microservices
-    $ docker-compose down && docker-compose up --build -d
-    ```
-
-## Tests
-
-1. At the project folder, run pytest
-    ```
-    cd python-microservices
-    $ pytest
-    ```
-
+Once again, run the microservices with the command:
+```
+docker-compose build && docker-compose up
+```
