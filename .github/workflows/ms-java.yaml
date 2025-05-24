@@ -10,5 +10,5 @@ jobs:
       language-version: '8'
       image-name: 'ms-java'
       image-version: '0.0.1'
-      working-directory: './user-service'
+      working-directory: './users-api'
     secrets: inherit
