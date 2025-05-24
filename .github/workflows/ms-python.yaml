@@ -1,0 +1,14 @@
+name: Python MS Build
+
+on: workflow_dispatch
+
+jobs:
+  maven-build-push:
+    uses: ./.github/workflows/build.yaml
+    with:
+      language: 'python'
+      language-version: '3.6.9'
+      image-name: 'ms-python'
+      image-version: '0.0.1'
+      working-directory: './ms-python'
+    secrets: inherit
