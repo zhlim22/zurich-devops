@@ -1,12 +1,8 @@
-locals {
-  ecr_name = "private_ecr"
-}
-
-variable "ecr_no" {
-  type = number
-  description = "Number of ECR"
+variable "ecr_names" {
+  type = set(string)
+  description = "ECR Names"
 }
 
 output "repository_url" {
-  value = aws_ecr_repository.ecr[*].repository_url
+  value = [for inst in aws_ecr_repository.ecr : inst.repository_url]
 }
