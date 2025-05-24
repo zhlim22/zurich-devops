@@ -3,7 +3,7 @@ name: Product API Build
 on: workflow_dispatch
 
 env:
-  working-directory: ./product
+  working-directory: ./users-service
 
 jobs:
   Build:
@@ -31,7 +31,7 @@ jobs:
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
-      image-name: productapi
+      image-name: usersservice
       version: 0.0.1
-      working-directory: ./product
+      working-directory: ./users-service
     needs: Build
