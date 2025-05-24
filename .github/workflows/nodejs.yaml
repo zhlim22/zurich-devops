@@ -1,4 +1,4 @@
-name: Product API Build
+name: User Service Build
 
 on: workflow_dispatch
 
