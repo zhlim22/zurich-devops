@@ -1,0 +1,35 @@
+name: Product API Build
+
+on: workflow_dispatch
+
+env:
+  working-directory: ./product
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+          cache: 'npm'
+
+      - name: Build Project
+        working-directory: ${{env.working-directory}}
+        run: npm install
+
+      - name: Run Unit Tests
+        working-directory: ${{env.working-directory}}
+        run: npm test
+
+  Docker:
+    uses: ./.github/workflows/docker-image-build.yaml
+    with:
+      image-name: productapi
+      version: 0.0.1
+      working-directory: ./product
+    needs: Build
