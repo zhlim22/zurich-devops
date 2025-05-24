@@ -2,11 +2,12 @@ name: User API Build
 
 on: workflow_dispatch
 
+env:
+  working-directory: ./users-api
+
 jobs:
   Build:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./users-api
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,6 +23,10 @@ jobs:
         working-directory: ${{env.working-directory}}
         run: ./mvnw clean install
 
+  Docker:
+    - runs-on: ubuntu-latest
+    - needs: Build
+    - steps:
       - name: Build Docker Image
         working-directory: ${{env.working-directory}}
         run: docker build . -t userapi:0.0.1
