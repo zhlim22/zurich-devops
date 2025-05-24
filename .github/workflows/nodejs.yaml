@@ -14,7 +14,6 @@ jobs:
 
       - name: Setup NodeJs
         uses: actions/setup-node@v4
-        node-version-file: ${{env.working-directory}}/package.json
         with:
           node-version: '14'
           cache: 'npm'
