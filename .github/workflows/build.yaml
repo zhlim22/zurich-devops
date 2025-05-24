@@ -1,4 +1,4 @@
-name: User API Build
+name: Build Template
 
 on:
   workflow_call:
@@ -40,5 +40,6 @@ jobs:
       image-name: ${{inputs.image-name}}
       version: ${{inputs.image-version}}
       working-directory: ${{inputs.working-directory}}
-    needs: Build
+    needs: [maven-build, nodejs-build]
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     secrets: inherit
