@@ -1,0 +1,14 @@
+name: NodeJs MS Build
+
+on: workflow_dispatch
+
+jobs:
+  maven-build-push:
+    uses: ./.github/workflows/build.yaml
+    with:
+      language: 'nodejs'
+      language-version: '14'
+      image-name: 'ms-node'
+      image-version: '0.0.1'
+      working-directory: './users-service'
+    secrets: inherit

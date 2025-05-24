@@ -1,4 +1,4 @@
-name: User API Build
+name: Build Template
 
 on:
   workflow_call:
