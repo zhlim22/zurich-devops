@@ -1,42 +1,36 @@
-version: '3.7'
+version: "3"
 
 services:
 
-  web:
-    command: uwsgi --ini ./uwsgi.ini
+  mongo:
+    image: mongo
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: python-microservices-web
-    image: local-python-microservices
-    volumes:
-      - type: bind
-        source: ./microservices
-        target: /app
-    networks:
-      - internal
-      - external
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
 
-  nginx:
-    container_name: webapp-nginx
-    image: nginx:latest
+  account-microservice:
     restart: always
-    volumes:
-      - ./nginx/:/etc/nginx/
-      - type: bind
-        source: ./microservices
-        target: /tmp
-    ports:
-      - "8000:5000"
-    networks:
-      - external
+    build: ./account-microservice
+    image: account-microservice
     depends_on:
-      - web
+      - mongo
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
 
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODE=dev
+      - MONGO_URL=mongo
+      - MONGO_PORT=27017
+      - SERVER_URL=0.0.0.0
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=pass
+      - PORT=2020
 
-networks:
-  internal:
-    driver: bridge
-  external:
-    driver: bridge
+    ports:
+      - "127.0.0.1:2020:2020"
+
