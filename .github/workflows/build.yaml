@@ -7,16 +7,10 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Build
-        uses: ./.github/workflows/maven.yaml
-        with:
-          version: '8'
-          working-directory: ./users-api
+    uses: ./.github/workflows/maven.yaml
+    with:
+      version: '8'
+      working-directory: ./users-api
 
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
