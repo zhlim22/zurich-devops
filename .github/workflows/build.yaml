@@ -1,8 +1,11 @@
 name: User API Build
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
+      language:
+        required: true
+        type: string
       language-version:
         required: true
         type: string
@@ -16,21 +19,26 @@ on:
         required: true
         type: string
 
-env:
-  working-directory: ./users-api
-
 jobs:
-  Build:
+  maven-build:
+    if: ${{inputs.language == 'java'}}
     uses: ./.github/workflows/maven.yaml
     with:
       version: ${{inputs.language-version}}
       working-directory: ${{inputs.working-directory}}
 
-  Docker:
+  nodejs-build:
+    if: ${{inputs.language == 'nodejs'}}
+    uses: ./.github/workflows/nodejs.yaml
+    with:
+      version: ${{inputs.language-version}}
+      working-directory: ${{inputs.working-directory}}
+
+  docker-push:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
       image-name: ${{inputs.image-name}}
       version: ${{inputs.image-version}}
-      working-directory: ./users-api
+      working-directory: ${{inputs.working-directory}}
     needs: Build
     secrets: inherit
