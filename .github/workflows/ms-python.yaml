@@ -7,7 +7,7 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       language: 'python'
-      language-version: '3.7'
+      language-version: '3.6.9'
       image-name: 'ms-python'
       image-version: '0.0.1'
       working-directory: './ms-python'
