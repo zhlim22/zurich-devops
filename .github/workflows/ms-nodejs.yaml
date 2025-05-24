@@ -10,5 +10,5 @@ jobs:
       language-version: '14'
       image-name: 'ms-node'
       image-version: '0.0.1'
-      working-directory: './users-service'
+      working-directory: './ms-nodejs'
     secrets: inherit
