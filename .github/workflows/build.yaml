@@ -30,7 +30,8 @@ jobs:
   Docker:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
-      image-name: userapi
+      image-name: ms-java
       version: 0.0.1
       working-directory: ./users-api
     needs: Build
+    secrets: inherit
