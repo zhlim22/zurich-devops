@@ -28,4 +28,5 @@ jobs:
     with:
       image-name: userapi
       version: 0.0.1
+      working-directory: ${{env.working-directory}}
     needs: Build

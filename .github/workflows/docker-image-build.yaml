@@ -9,6 +9,9 @@ on:
       version:
         required: true
         type: string
+      working-directory:
+        required: true
+        type: string
 
 jobs:
   Docker:
@@ -19,3 +22,4 @@ jobs:
 
       - name: Build Docker Image
         run: docker build . -t ${{inputs.image-name}}:${{inputs.version}}
+        working-directory: ${{inputs.working-directory}}
