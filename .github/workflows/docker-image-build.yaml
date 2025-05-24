@@ -35,6 +35,6 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build . -t ${{ecr-base-url}}/${{inputs.image-name}}:${{inputs.version}}
-          docker push ${{ecr-base-url}}/${{inputs.image-name}}:${{inputs.version}}
+          docker build . -t ${{env.ecr-base-url}}/${{inputs.image-name}}:${{inputs.version}}
+          docker push ${{env.ecr-base-url}}/${{inputs.image-name}}:${{inputs.version}}
         working-directory: ${{inputs.working-directory}}
