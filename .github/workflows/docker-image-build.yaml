@@ -1,0 +1,25 @@
+name: Docker Image Build
+
+on:
+  workflow_call:
+    inputs:
+      image-name:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      working-directory:
+        required: true
+        type: string
+
+jobs:
+  Docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build . -t ${{inputs.image-name}}:${{inputs.version}}
+        working-directory: ${{inputs.working-directory}}

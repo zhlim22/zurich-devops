@@ -1,7 +1,9 @@
 name: User API Build
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
+
+env:
+  working-directory: ./users-api
 
 jobs:
   Build:
@@ -14,7 +16,21 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '8'
+          distribution: 'corretto'
           cache: 'maven'
 
-      - name: Maven Install
-        run: ./mvnw clean install
+      - name: Build Project
+        working-directory: ${{env.working-directory}}
+        run: ./mvnw clean install -DskipTests
+
+      - name: Run Unit Tests
+        working-directory: ${{env.working-directory}}
+        run: ./mvnw test
+
+  Docker:
+    uses: ./.github/workflows/docker-image-build.yaml
+    with:
+      image-name: userapi
+      version: 0.0.1
+      working-directory: ./users-api
+    needs: Build
