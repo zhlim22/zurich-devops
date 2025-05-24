@@ -34,12 +34,19 @@ jobs:
       version: ${{inputs.language-version}}
       working-directory: ${{inputs.working-directory}}
 
+  python-build:
+    if: ${{inputs.language == 'python'}}
+    uses: ./.github/workflows/python.yaml
+    with:
+      version: ${{inputs.language-version}}
+      working-directory: ${{inputs.working-directory}}
+
   docker-push:
     uses: ./.github/workflows/docker-image-build.yaml
     with:
       image-name: ${{inputs.image-name}}
       version: ${{inputs.image-version}}
       working-directory: ${{inputs.working-directory}}
-    needs: [maven-build, nodejs-build]
+    needs: [maven-build, nodejs-build, python-build]
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     secrets: inherit

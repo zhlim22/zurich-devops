@@ -1,0 +1,31 @@
+name: Maven Build
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      working-directory:
+        required: true
+        type: string
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{inputs.version}}
+
+      - name: Build Project
+        working-directory: ${{inputs.working-directory}}
+        run: pip install -r requirements.txt
+
+      - name: Run Unit Tests
+        working-directory: ${{inputs.working-directory}}
+        run: pytest
