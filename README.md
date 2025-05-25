@@ -19,7 +19,8 @@ You can find the terraform scripts under the terraform folder. Folder contains a
 You can find all the workflow yaml files for the reusable yaml template in the ```.github/workflows``` folder. 
 
 ### build.yaml 
-This will be reusable pipeline template that build and test applications in different programming languages, build the docker image for the application and push it to ECR.
+This is a reusable pipeline CI/CD template that builds and runs unit tests of the desired application, build the docker image for the application and push it to ECR.
+It supports several programming languages.
 It has a ```workflow_call``` trigger and takes the few mandatory arguments below:
 - language: This will be the programming language of the application. It can only take ```java```, ```nodejs``` and ```python```
 - language-version: This will be the version of the programming language, i.e. if you want to use java 17, then you can enter ```17``` for this argument
@@ -28,7 +29,7 @@ It has a ```workflow_call``` trigger and takes the few mandatory arguments below
 - working-directory: This will be the relative path of your project from the root folder
 
 The pipeline will first call another reusable pipeline to build and run the unit test of the application based on the programming language specified:
-- java: ```java.yaml``` will be called
+- java: ```maven.yaml``` will be called
 - nodejs: ```nodejs.yaml``` will be called
 - python: ```python.yaml``` will be called
 
